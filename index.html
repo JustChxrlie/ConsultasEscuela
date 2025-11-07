@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Consulta de Alumnos</title>
   <style>
     body {
@@ -47,10 +48,17 @@
       margin-top: 0;
       color: #444;
     }
+    .observaciones {
+      border-left: 5px solid #f1c40f;
+      background: #fff8dc;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
-  <h1>Consulta de Alumnos</h1>
+  <h1>Consulta de Alumnos Escuela Secundaria Mixta 59</h1>
   <input type="text" id="codigo" placeholder="Ingrese código del alumno">
   <button onclick="buscarAlumno()">Buscar</button>
 
@@ -71,14 +79,21 @@
         return;
       }
 
-      const calC1 = parseFloat(alumno["TOTAL DE CALIFICACION C1"]) || 0;
-      const calC2 = parseFloat(alumno["TOTAL DE CALIFICACION C2"]) || 0;
-      const exm = parseFloat(alumno["EXAMEN"]) || 0;
-      const promedio = (exm + (calC1 + calC2) / 2).toFixed(2);
+      const observaciones =
+        alumno["Observaciones"] ||
+        alumno["OBSERVACIONES"] ||
+        alumno["Observacion"] ||
+        alumno["OBSERVACION"] ||
+        "-";
 
       document.getElementById("resultado").innerHTML = `
         <div class="result">
           <h2>${alumno.Nombre || alumno.NOMBRE} (${alumno.CODIGO})</h2>
+
+          <div class="observaciones">
+            <h3>📝 Observaciones del alumno:</h3>
+            <p>${observaciones}</p>
+          </div>
 
           <div class="grid">
             <div class="card">
@@ -113,3 +128,4 @@
 </body>
 
 </html>
+
