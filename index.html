@@ -86,6 +86,14 @@
     <div id="resultado2"></div>
   </div>
 
+    <!-- ===== BUSCADOR 3er TRIMESTRE ===== -->
+  <div class="box">
+    <h2>3er Trimestre</h2>
+    <input type="text" id="codigo3" placeholder="Ingrese código del alumno">
+    <button onclick="buscarAlumno3()">Buscar</button>
+    <div id="resultado2"></div>
+  </div>
+
   <script>
 
     /* URL del 1er Trimestre */
@@ -93,7 +101,9 @@
 
     /* URL del 2do Trimestre */
     const url2 = "https://opensheet.elk.sh/1oESTM8BQA-vJVCHSshCLjJXnWcCHxOBBHyLJ0g_3M3I/concentrado"; 
-  
+
+    /* URL del 3er Trimestre */
+    const url3 = "https://opensheet.elk.sh/1oESTM8BQA-vJVCHSshCLjJXnWcCHxOBBHyLJ0g_3M3I/concentrado"; 
 
     
     /* ----------- 1ER TRIMESTRE ----------- */
@@ -126,6 +136,22 @@
       }
 
       document.getElementById("resultado2").innerHTML = generarHTML_2do(alumno);
+    }
+
+        /* ----------- 3ER TRIMESTRE ----------- */
+    async function buscarAlumno3() {
+      const codigo = document.getElementById("codigo3").value.trim();
+      const res = await fetch(url3);
+      const data = await res.json();
+
+      const alumno = data.find(a => a.CODIGO.trim().toUpperCase() === codigo.toUpperCase());
+
+      if (!alumno) {
+        document.getElementById("resultado3").innerHTML = "<p>No se encontró el alumno.</p>";
+        return;
+      }
+
+      document.getElementById("resultado3").innerHTML = generarHTML_3er(alumno);
     }
 
     /*              HTML 1ER TRIMESTRE                 */
@@ -236,9 +262,68 @@
       `;
     }
 
+    /*              HTML 3ER TRIMESTRE                 */
+
+    function generarHTML_3er(alumno) {
+
+      const obs3 = alumno["Observaciones"] 
+                || alumno["OBSERVACIONES"] 
+                || alumno["Observacion"] 
+                || alumno["OBSERVACION"]
+                || "-";
+
+      return `
+        <div class="result">
+          <h2>${alumno.Nombre || alumno.NOMBRE} (${alumno.CODIGO})</h2>
+
+          <div class="observaciones">
+            <h3>📝 Observaciones del Alumno (2do Trimestre):</h3>
+            <p>${obs2}</p>
+          </div>
+
+          <div class="grid">
+            <div class="card">
+              <h3>1er Contenido</h3>
+              <p><b>Trabajos:</b> ${alumno["TAREAS de 80"] || "-"}</p>
+              <p><b>Prácticas:</b> ${alumno["Pract 4. Energia"] || "-"}</p>
+              <p><b>Proyecto:</b> ${alumno["Proyecto Mapa"] || "-"}</p>
+              <p><b>Fichas:</b> ${alumno["FICHAS 1 a la 5"] || "-"}</p>
+              <p><b>Calificacion:</b> ${alumno["TOTAL DE CALIFICACION C1"] || "-"}</p>
+            </div>
+
+            <div class="card">
+              <h3>2do Contenido</h3>
+              <p><b>Trabajos:</b> ${alumno["TAREAS de 70"] || "-"}</p>
+              <p><b>Prácticas:</b> ${alumno["Pract 5.Sist  Tecn CANVA"] || "-"}</p>
+              <p><b>Proyecto:</b> ${alumno["Proyecto  Avance Empresa"] || "-"}</p>
+              <p><b>Fichas:</b> ${alumno["FICHAS 6 a la 15"] || "-"}</p>
+              <p><b>Calificacion:</b> ${alumno["TOTAL DE CALIFICACION C2"] || "-"}</p>
+            </div>
+
+            <div class="card">
+              <h3>3er Contenido</h3>
+              <p><b>Trabajos:</b> ${alumno["TAREAS de 60"] || "-"}</p>
+              <p><b>Prácticas:</b> ${alumno["Práct 6. Pres CANVA empr"] || "-"}</p>
+              <p><b>Proyecto:</b> ${alumno["Proyecto EMPRE"] || "-"}</p>
+              <p><b>Fichas:</b> ${alumno["FICHAS 16 a la 25"] || "-"}</p>
+              <p><b>Calificacion:</b> ${alumno["TOTAL DE CALIFICACION C3"] || "-"}</p>              
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 15px;">
+            <h3>Examen</h3>
+            <p><b>Aciertos:</b> ${alumno["ACIERTOSE"] || "-"}</p>
+            <p><b>Valor:</b> ${alumno["EXAMEN"] || "-"}</p>
+            <p><b>Total Trimestre:</b> ${alumno["TOTAL TRIMESTRE"] || "-"}</p>
+          </div>
+        </div>
+      `;
+    }
+
 </script>
 
 
 </body>
 </html>
+
 
